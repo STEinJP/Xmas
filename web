@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖誕節微積分挑戰</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: green;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkgreen;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>聖誕節微積分挑戰</h1>
+        <p id="question">正在生成問題...</p>
+        <input type="text" id="answer" placeholder="輸入你的答案">
+        <br>
+        <button onclick="checkAnswer()">提交答案</button>
+    </div>
+
+    <script>
+        const BLESSING_VIDEO_URL = "https://youtu.be/rB7SfHPmb5o";
+        const PRANK_MUSIC_URL = "https://youtu.be/aAkMkVFwAoo?si=Aal3ah7FcNUZw9wH";
+
+        let correctAnswer;
+
+        function generateQuestion() {
+            const coef = Math.floor(Math.random() * 5) + 1;
+            const power = Math.floor(Math.random() * 4) + 1;
+            const question = `${coef}x^${power}`;
+            correctAnswer = math.derivative(question, 'x').toString();
+
+            document.getElementById('question').innerText = `解答以下微積分題目來獲得聖誕祝福！\n\n d/dx(${question})`;
+        }
+
+        function preprocessInput(input) {
+            return input.replace(/\^/g, '**').replace(/(\d)(x)/g, '$1*$2');
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value;
+            const processedAnswer = preprocessInput(userAnswer);
+
+            try {
+                const userExpr = math.simplify(processedAnswer);
+                const correctExpr = math.simplify(correctAnswer);
+
+                if (math.equal(userExpr, correctExpr)) {
+                    alert("答對了！即將跳轉到祝福影片！");
+                    window.open(BLESSING_VIDEO_URL, '_blank');
+                } else {
+                    alert("答錯了！播放整人音樂！");
+                    window.open(PRANK_MUSIC_URL, '_blank');
+                }
+            } catch (e) {
+                alert("無法解析你的輸入，請檢查數學表達式！提示：使用 * 表示乘號，^ 表示次方。");
+            }
+        }
+
+        // 初始化生成問題
+        generateQuestion();
+    </script>
+</body>
+</html>
